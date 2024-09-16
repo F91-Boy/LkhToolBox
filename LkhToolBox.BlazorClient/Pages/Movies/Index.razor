@@ -1,0 +1,26 @@
+﻿@page "/Index"
+@using LkhToolBox.BlazorClient.Models
+<h3>Index</h3>'
+
+<FluentGrid >
+    
+</FluentGrid>
+
+
+@code {
+    List<Movie> MoviesList = [];
+
+    protected override void OnInitialized()
+    {
+        MoviesList = new List<Movie>()
+        {
+            new Movie { Title = "你好", Genres = ["爱情,悬疑"], 
+                Id = Guid.NewGuid(), Rating = 4.5f, UserRating = 5, YearOfRelease = 2022 },
+            new Movie { Title = "柯南", Genres = ["动作"], 
+                Id = Guid.NewGuid(), Rating = 4.8f, UserRating = 3, YearOfRelease = 2019 },
+            new Movie { Title = "数码宝贝", Genres = ["喜剧,悬疑"], 
+                Id = Guid.NewGuid(), Rating = 4.5f, UserRating = 4, YearOfRelease = 2017 },
+        };
+    }
+
+}
