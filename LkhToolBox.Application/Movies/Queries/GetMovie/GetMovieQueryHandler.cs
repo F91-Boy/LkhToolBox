@@ -12,22 +12,13 @@ namespace LkhToolBox.Application.Movies.Queries.GetMovie
     public class GetMovieQueryHandler(
         IMovieRepository movieRepository
         )
-        : IRequestHandler<GetMovieQuery, ResponseResult<Movie>>
+        : IRequestHandler<GetMovieQuery, Movie?>
     {
-        public async Task<ResponseResult<Movie>> Handle(GetMovieQuery request, CancellationToken cancellationToken)
+        public async Task<Movie?> Handle(GetMovieQuery request, CancellationToken cancellationToken)
         {
             var movie = await movieRepository.GetBySlugAsync(request.Slug, token: cancellationToken);
 
-            return movie == null ?
-                 new ResponseResult<Movie>
-                 {
-                     IsSuccess = false,
-                     ErrorMessage = "不存在这样的电影"
-                 } :
-                 new ResponseResult<Movie>
-                 {
-                     Data = movie
-                 };
+            return movie;
         }
     }
 }

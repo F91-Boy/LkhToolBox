@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace LkhToolBox.Application.Movies.Queries.GetMovie
 {
-    public record GetMovieQuery(string Slug) : IRequest<ResponseResult<Movie>>;
+    public record GetMovieQuery(string Slug) : IRequest<Movie?>;
    
 }

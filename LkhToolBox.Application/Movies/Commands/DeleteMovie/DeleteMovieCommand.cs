@@ -6,9 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LkhToolBox.Application.Movies.Queries.GetMovieList
+namespace LkhToolBox.Application.Movies.Commands.DeleteMovie
 {
-    public record GetMovieListQuery(GetAllMoviesOptions Options)
-        : IRequest<List<Movie>>;
-   
+    public record DeleteMovieCommand(Guid Id):IRequest<bool>;
+    
 }

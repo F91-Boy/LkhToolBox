@@ -11,8 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Movies\Commands\UpdateMovie\" />
-    <Folder Include="Movies\Commands\DeleteMovie\" />
     <Folder Include="Resumes\Commands\CreateResume\" />
     <Folder Include="Resumes\Queries\" />
   </ItemGroup>

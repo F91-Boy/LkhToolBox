@@ -10,7 +10,7 @@ namespace LkhToolBox.Domain.Movies
 
     public partial class Movie
     {
-        public Guid Id { get; init; }
+        public Guid Id { get; set; }
 
         public string Title { get; set; } = default!;
 

@@ -2,6 +2,8 @@
 using LkhToolBox.Api.Auth;
 using LkhToolBox.Application;
 using LkhToolBox.Application.Movies.Commands.CreateMovie;
+using LkhToolBox.Application.Movies.Commands.DeleteMovie;
+using LkhToolBox.Application.Movies.Commands.UpdateMovie;
 using LkhToolBox.Application.Movies.Queries.GetMovie;
 using LkhToolBox.Application.Movies.Queries.GetMovieList;
 using LkhToolBox.Contracts.Movies.Requests;
@@ -16,7 +18,7 @@ namespace LkhToolBox.Api.Controllers
 {
     [ApiController]
     public class MoviesController(
-        IMediator mediator ,
+        IMediator mediator,
         //IOutputCacheStore outputCacheStore,
         IMapper mapper
         ) : ControllerBase
@@ -28,11 +30,11 @@ namespace LkhToolBox.Api.Controllers
         [ProducesResponseType(typeof(MovieResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreateMovieRequest request, CancellationToken token)
         {
-            var movie =mapper.Map<CreateMovieRequest,Movie>(request);
+            var movie = mapper.Map<CreateMovieRequest, Movie>(request);
 
-            var command = new CreateMovieCommand(movie,token);
+            var command = new CreateMovieCommand(movie, token);
 
-            var createResult =  await mediator.Send(command, token);
+            var createResult = await mediator.Send(command, token);
 
             //await outputCacheStore.EvictByTagAsync("movies", token);//令缓存失效
 
@@ -79,50 +81,65 @@ namespace LkhToolBox.Api.Controllers
             var option = mapper.Map<GetAllMoviesRequest, GetAllMoviesOptions>(request);
             var query = new GetMovieListQuery(option);
             var queryResult = await mediator.Send(query, token);
-           
+
             return Ok(queryResult);
         }
 
         //[Authorize(AuthConstants.TrustedMemberPolicyName)]
-        //[HttpPut(ApiEndpoints.Movies.Update)]
-        //[ProducesResponseType(typeof(MovieResponse), StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(typeof(ValidationFailureResponse), StatusCodes.Status400BadRequest)]
-        //public async Task<IActionResult> Update([FromRoute] Guid id, [
-        //    FromBody]UpdateMovieRequest request, CancellationToken token)
-        //{
-        //    var userId = HttpContext.GetUserId();
+        [HttpPut(ApiEndpoints.Movies.Update)]
+        [ProducesResponseType(typeof(MovieResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ValidationFailureResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [
+            FromBody]UpdateMovieRequest request, CancellationToken token)
+        {
+            //var userId = HttpContext.GetUserId();
 
-        //    var movie = request.MapToMovie(id);
-        //    var updatedMovie = await mediator.UpdateAsync(movie, userId, token);
-        //    if (updatedMovie is null)
-        //    {
-        //        return NotFound();
-        //    }
+            //var movie = request.MapToMovie(id);
+            //var updatedMovie = await mediator.UpdateAsync(movie, userId, token);
+            //if (updatedMovie is null)
+            //{
+            //    return NotFound();
+            //}
 
 
-        //    var response = movie.MapToResponse();
+            //var response = movie.MapToResponse();
 
-        //    await outputCacheStore.EvictByTagAsync("movies", token);//令缓存失效
-        //    return Ok(response);
-        //}
+            //await outputCacheStore.EvictByTagAsync("movies", token);//令缓存失效
+            var movie = mapper.Map<UpdateMovieRequest, Movie>(request);
+          
+
+            var command = new UpdateMovieCommand(id,movie);
+
+            var commandResult = await mediator.Send(command, token);
+
+            return commandResult == null ? NotFound() : Ok(commandResult);
+        }
 
         //[Authorize(AuthConstants.AdminUserPolicyName)]
-        //[HttpDelete(ApiEndpoints.Movies.Delete)]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
-        //{
-        //    var userId = HttpContext.GetUserId();
+        [HttpDelete(ApiEndpoints.Movies.Delete)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
+        {
+            //var userId = HttpContext.GetUserId();
 
-        //    var deleted = await mediator.DeleteByIdAsync(id, token);
-        //    if (!deleted)
-        //    {
-        //        return NotFound();
-        //    }
+            //var deleted = await mediator.DeleteByIdAsync(id, token);
+            //if (!deleted)
+            //{
+            //    return NotFound();
+            //}
 
-        //    await outputCacheStore.EvictByTagAsync("movies", token);//令缓存失效
-        //    return Ok();
-        //}
+            //await outputCacheStore.EvictByTagAsync("movies", token);//令缓存失效
+            var command = new DeleteMovieCommand(id);
+            var commandResult = await mediator.Send(command, token);
+
+            if (commandResult == false)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
     }
 }
