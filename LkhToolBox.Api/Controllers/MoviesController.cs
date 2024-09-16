@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using LkhToolBox.Api.Auth;
-using LkhToolBox.Application;
 using LkhToolBox.Application.Movies.Commands.CreateMovie;
 using LkhToolBox.Application.Movies.Commands.DeleteMovie;
 using LkhToolBox.Application.Movies.Commands.UpdateMovie;
@@ -10,9 +8,7 @@ using LkhToolBox.Contracts.Movies.Requests;
 using LkhToolBox.Contracts.Movies.Responses;
 using LkhToolBox.Domain.Movies;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OutputCaching;
 
 namespace LkhToolBox.Api.Controllers
 {
@@ -31,11 +27,8 @@ namespace LkhToolBox.Api.Controllers
         public async Task<IActionResult> Create([FromBody] CreateMovieRequest request, CancellationToken token)
         {
             var movie = mapper.Map<CreateMovieRequest, Movie>(request);
-
             var command = new CreateMovieCommand(movie, token);
-
             var createResult = await mediator.Send(command, token);
-
             //await outputCacheStore.EvictByTagAsync("movies", token);//令缓存失效
 
             //var response = mapper.Map<Movie, MovieResponse>(createResult.Data);
@@ -81,7 +74,6 @@ namespace LkhToolBox.Api.Controllers
             var option = mapper.Map<GetAllMoviesRequest, GetAllMoviesOptions>(request);
             var query = new GetMovieListQuery(option);
             var queryResult = await mediator.Send(query, token);
-
             return Ok(queryResult);
         }
 
@@ -108,11 +100,8 @@ namespace LkhToolBox.Api.Controllers
             //await outputCacheStore.EvictByTagAsync("movies", token);//令缓存失效
             var movie = mapper.Map<UpdateMovieRequest, Movie>(request);
           
-
             var command = new UpdateMovieCommand(id,movie);
-
             var commandResult = await mediator.Send(command, token);
-
             return commandResult == null ? NotFound() : Ok(commandResult);
         }
 
@@ -133,12 +122,10 @@ namespace LkhToolBox.Api.Controllers
             //await outputCacheStore.EvictByTagAsync("movies", token);//令缓存失效
             var command = new DeleteMovieCommand(id);
             var commandResult = await mediator.Send(command, token);
-
             if (commandResult == false)
             {
                 return NotFound();
             }
-
             return NoContent();
         }
     }

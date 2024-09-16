@@ -1,8 +1,6 @@
 using Asp.Versioning;
 using LkhToolBox.Application;
 using LkhToolBox.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 

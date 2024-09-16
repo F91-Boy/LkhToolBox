@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace LkhToolBox.Domain.Movies
 {
-
     public partial class Movie
     {
         public Guid Id { get; set; }
@@ -22,21 +16,17 @@ namespace LkhToolBox.Domain.Movies
 
         //评分相关
         public float? Rating { get; set; }
-        public int? UserRating { get; set; }
 
+        public int? UserRating { get; set; }
 
         public string GenerateSlug()
         {
             var sluggedTitle = SlugRegex().Replace(Title, string.Empty).ToLower().Replace(" ", "-");
-
             return $"{sluggedTitle}-{YearOfRelease}";
-                //Slug =  $"{sluggedTitle}-{YearOfRelease}";; 
-
+            //Slug =  $"{sluggedTitle}-{YearOfRelease}";
         }
 
         [GeneratedRegex("[^0-9A-Za-z _-]", RegexOptions.NonBacktracking, 5)]
         private static partial Regex SlugRegex();
-
-
     }
 }

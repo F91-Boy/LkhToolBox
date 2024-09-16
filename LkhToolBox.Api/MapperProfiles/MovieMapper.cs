@@ -2,7 +2,6 @@
 using LkhToolBox.Contracts.Movies.Requests;
 using LkhToolBox.Contracts.Movies.Responses;
 using LkhToolBox.Domain.Movies;
-using System.Threading;
 
 namespace LkhToolBox.Api.MapperProfiles
 {
@@ -24,22 +23,22 @@ namespace LkhToolBox.Api.MapperProfiles
             CreateMap<Movie, MovieResponse>();
         }
 
-        private SortField SortByStringToEnum(string? value)
+        private SortFieldEnum SortByStringToEnum(string? value)
         {
-            if (value is null) return SortField.DefaultSort;
+            if (value is null) return SortFieldEnum.DefaultSort;
             //true表示忽略大小写
-           var isSuccess =  Enum.TryParse(typeof(SortField), value, true,out var parseResult);
+           var isSuccess =  Enum.TryParse(typeof(SortFieldEnum), value, true,out var parseResult);
 
-            return isSuccess ? (SortField)parseResult! : SortField.DefaultSort;
+            return isSuccess ? (SortFieldEnum)parseResult! : SortFieldEnum.DefaultSort;
         }
 
-        private SortOrder SortOrderStringToEnum(string? value)
+        private SortOrderEnum SortOrderStringToEnum(string? value)
         {
-            if (value is null) return SortOrder.Unsorted;
+            if (value is null) return SortOrderEnum.Unsorted;
             //true表示忽略大小写
-            var isSuccess = Enum.TryParse(typeof(SortOrder), value, true, out var parseResult);
+            var isSuccess = Enum.TryParse(typeof(SortOrderEnum), value, true, out var parseResult);
 
-            return isSuccess ? (SortOrder)parseResult! : SortOrder.Unsorted;
+            return isSuccess ? (SortOrderEnum)parseResult! : SortOrderEnum.Unsorted;
         }
     }
 }

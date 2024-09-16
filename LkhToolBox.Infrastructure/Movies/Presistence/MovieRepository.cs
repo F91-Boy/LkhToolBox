@@ -26,7 +26,6 @@ namespace LkhToolBox.Infrastructure.Movies.Presistence
             return await dbContext.Movies.AnyAsync(m => m.Id == id, token);
         }
 
-
         //通过id获取
         public async Task<Movie?> GetByIdAsync(Guid id, Guid? userId = null, CancellationToken token = default)
         {
@@ -46,22 +45,21 @@ namespace LkhToolBox.Infrastructure.Movies.Presistence
 
             var movieIQuery = dbContext.Movies.AsQueryable();
 
-            if (options.SortField != SortField.DefaultSort)
+            if (options.SortField != SortFieldEnum.DefaultSort)
             {
-                if (options.SortField == SortField.Title)
+                if (options.SortField == SortFieldEnum.Title)
                 {
                     orderResult = options.SortOrder switch
                     {
-                        SortOrder.Asc => movieIQuery.OrderBy(m => m.Title),
-                        SortOrder.Desc => movieIQuery.OrderByDescending(m => m.Title),
-
+                        SortOrderEnum.Asc => movieIQuery.OrderBy(m => m.Title),
+                        SortOrderEnum.Desc => movieIQuery.OrderByDescending(m => m.Title),
                     };
-                }else if (options.SortField == SortField.Year)
+                }else if (options.SortField == SortFieldEnum.Year)
                 {
                     orderResult = options.SortOrder switch
                     {
-                        SortOrder.Asc => movieIQuery.OrderBy(m => m.YearOfRelease),
-                        SortOrder.Desc => movieIQuery.OrderByDescending(m => m.YearOfRelease),
+                        SortOrderEnum.Asc => movieIQuery.OrderBy(m => m.YearOfRelease),
+                        SortOrderEnum.Desc => movieIQuery.OrderByDescending(m => m.YearOfRelease),
                     };
                 }
                 movieIQuery = orderResult.AsQueryable();
@@ -77,19 +75,9 @@ namespace LkhToolBox.Infrastructure.Movies.Presistence
             {
                 movieIQuery = movieIQuery.Where(m => m.Title.Contains(options.Title));
             }
-            //return await movieIQuery
-            //        .Where(m => m.Id == options.UserId)
-            //        .Where(m => m.YearOfRelease == options.YearOfRelease)
-            //        .Where(m => m.Title == options.Title)
-            //        .Skip(options.Page * options.PageSize).Take(options.PageSize)
-            //        .ToListAsync();
-
             return await movieIQuery
-                
-                  .Skip((options.Page-1) * options.PageSize).Take(options.PageSize)
-                  .ToListAsync();
+                .Skip((options.Page-1) * options.PageSize).Take(options.PageSize).ToListAsync();
         }
-
 
         //更新
         public Task UpdateAsync(Movie movie, CancellationToken token = default)
@@ -97,7 +85,5 @@ namespace LkhToolBox.Infrastructure.Movies.Presistence
             dbContext.Movies.Update(movie);
             return Task.CompletedTask;
         }
-
-
     }
 }

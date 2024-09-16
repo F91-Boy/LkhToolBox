@@ -3,12 +3,12 @@ using LkhToolBox.Domain.Movies;
 
 namespace LkhToolBox.Api.MapperProfiles
 {
-    public class SortByStringToEnumTypeConverter : ITypeConverter<string, SortField>
+    public class SortByStringToEnumTypeConverter : ITypeConverter<string, SortFieldEnum>
     {
-        public SortField Convert(string source, SortField destination, ResolutionContext context)
+        public SortFieldEnum Convert(string source, SortFieldEnum destination, ResolutionContext context)
         {
             //true表示忽略大小写
-            return (SortField)Enum.Parse(typeof(SortField), source, true);
+            return (SortFieldEnum)Enum.Parse(typeof(SortFieldEnum), source, true);
         }
 
 
